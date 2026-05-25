@@ -347,8 +347,10 @@ h1, h2, h3 {
 }
 
 .brass-plaque {
-  width: 85%;
-  height: 38px;
+  width: 90%;
+  min-height: 38px;
+  height: auto;
+  padding: 4px 8px;
   background: var(--brass-bg);
   border: 1.5px solid var(--wood-brown);
   border-radius: 4px;
@@ -376,16 +378,19 @@ h1, h2, h3 {
 
 .brass-plaque-text {
   font-family: var(--font-serif);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 900;
   color: hsl(24, 40%, 10%);
   text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 6px;
+  padding: 2px 4px;
 }
 
 /* RIGHT PAGE: Auto-scroll content card */
@@ -1026,16 +1031,24 @@ h1, h2, h3 {
   }
   
   .brass-plaque {
-    height: 22px;
+    height: auto;
+    min-height: 26px;
     width: 90%;
     border-radius: 2px;
     margin-bottom: 0;
+    padding: 2px 4px;
   }
   
   .brass-plaque-text {
-    font-size: 0.62rem;
-    letter-spacing: 0.5px;
-    padding: 0 4px;
+    font-size: 0.56rem;
+    letter-spacing: 0.3px;
+    padding: 1px 2px;
+    line-height: 1.15;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   /* Scrollable story page internally on mobile */
@@ -1238,11 +1251,14 @@ h1, h2, h3 {
   }
 
   .brass-plaque {
-    height: 20px;
+    height: auto;
+    min-height: 24px;
+    padding: 1px 3px;
   }
 
   .brass-plaque-text {
-    font-size: 0.58rem;
+    font-size: 0.52rem;
+    line-height: 1.1;
   }
 
   .story-page {
