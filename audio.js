@@ -57,6 +57,44 @@ class StoryAudioEngine {
     osc2.stop(now + 0.3);
   }
 
+  // Gentle, organic procedural "Page Flip" sound (soft paper rustle)
+  playPageFlip() {
+    this.init();
+    if (this.muted) return;
+    this.ctx.resume();
+
+    const now = this.ctx.currentTime;
+    const bufferSize = this.ctx.sampleRate * 0.15; // 0.15 seconds of noise
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    // Fill buffer with random noise
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    // Apply a bandpass filter to capture exact mid-range paper-rustling frequencies
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(600, now);
+    filter.frequency.exponentialRampToValueAtTime(320, now + 0.12);
+    filter.Q.setValueAtTime(2.5, now);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(this.sfxVolume * 0.35, now); // Very gentle and soft
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.gainNode);
+
+    noise.start(now);
+    noise.stop(now + 0.15);
+  }
+
   // Low descending retro "Buzz" sound
   playIncorrect() {
     this.init();

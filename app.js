@@ -341,7 +341,7 @@ function goToPage(index) {
   loadMiniGame(page.gameType);
 
   // Play normal paging page sound
-  if (isSoundOn) window.storyAudio.playCorrect();
+  if (isSoundOn) window.storyAudio.playPageFlip();
 }
 
 function prevPage() {
