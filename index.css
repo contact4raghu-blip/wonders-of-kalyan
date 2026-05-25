@@ -697,6 +697,17 @@ h1, h2, h3 {
   background: var(--bg-sepia-accent);
   cursor: pointer;
   transition: var(--transition-fast);
+  position: relative;
+}
+
+/* Expanded clickable/tappable area for child-friendly touch accessibility */
+.level-dot::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: -8px;
+  right: -8px;
 }
 
 .level-dot.active {
@@ -961,9 +972,9 @@ h1, h2, h3 {
   }
 
   .icon-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 0.95rem;
+    width: 38px;
+    height: 38px;
+    font-size: 1.05rem;
   }
   
   #main-content-screens {
@@ -1087,8 +1098,10 @@ h1, h2, h3 {
   }
 
   .narrate-btn {
-    padding: 5px 10px;
-    font-size: 0.78rem;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    min-height: 38px;
+    border-radius: 20px;
   }
 
   .fact-box {
@@ -1120,13 +1133,23 @@ h1, h2, h3 {
   }
 
   .cargo-item {
-    padding: 4px 8px;
-    font-size: 0.75rem;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
   }
 
   .cargo-ship {
-    padding: 4px 8px;
-    font-size: 0.75rem;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
   }
 
   .bamboo-grid {
@@ -1134,7 +1157,7 @@ h1, h2, h3 {
   }
 
   .bamboo-stalk {
-    height: 38px;
+    height: 44px;
   }
 
   /* Compact bottom navigation bar */
@@ -1151,11 +1174,15 @@ h1, h2, h3 {
   }
   
   .nav-btn {
-    height: 36px;
-    padding: 0 14px;
-    border-radius: 18px;
-    font-size: 0.85rem;
-    border-width: 1.5px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 21px;
+    font-size: 0.9rem;
+    border-width: 2px;
+    min-width: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .level-dots-container {
@@ -1163,8 +1190,8 @@ h1, h2, h3 {
   }
   
   .level-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
 
   /* Cover card adjustments */

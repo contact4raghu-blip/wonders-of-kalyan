@@ -174,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderGlossary();
   setupLevelDots();
   loadSpeechVoices();
+  setupSwipeGestures();
 });
 
 function setupGlobalEvents() {
@@ -935,4 +936,40 @@ function initMetroSimulatorGame(container) {
       document.getElementById("metro-speed").style.color = "var(--color-crimson)";
     }
   };
+}
+
+// Add swipe gestures on mobile for screen-reader page transitions
+function setupSwipeGestures() {
+  const storybook = document.querySelector(".storybook-layout");
+  if (!storybook) return;
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  storybook.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  storybook.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    // Horizontal swipe threshold of 60px, ensuring horizontal movement dominates
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
+      if (diffX < 0) {
+        nextPage();
+      } else {
+        prevPage();
+      }
+    }
+  }
 }
