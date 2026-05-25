@@ -49,6 +49,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent; /* Remove default tapping grey overlays on Android & iOS */
 }
 
 body {
@@ -64,6 +65,8 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden; /* Lock the browser scroll completely! */
+  overscroll-behavior: none; /* Prevent elastic bounce-back pull on Android/iOS Safari/Chrome */
+  touch-action: manipulation; /* Eliminate mobile 300ms delay and block double-tap page zoom */
 }
 
 h1, h2, h3 {
