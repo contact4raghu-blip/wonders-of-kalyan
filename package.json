@@ -1,0 +1,18 @@
+{
+  "name": "wonders-of-kalyan",
+  "version": "1.0.0",
+  "description": "Interactive children's history storybook about Kalyan, Maharashtra.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y http-server -p 3000 -o"
+  },
+  "keywords": [
+    "storybook",
+    "children",
+    "kalyan",
+    "interactive",
+    "chibi"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}

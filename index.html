@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wonders of Kalyan: A Chibi History Adventure</title>
+  <meta name="description" content="Discover the rich local history of Kalyan, Maharashtra through an interactive, illustrated children's storybook featuring cute 3D chibi figurines, read-aloud voice narration, and fun mini-games!">
+  
+  <!-- SEO & Social OpenGraph -->
+  <meta property="og:title" content="The Wonders of Kalyan: A Chibi History Adventure">
+  <meta property="og:description" content="An interactive illustrated children's storybook teaching local history through chibi collectibles.">
+  <meta property="og:type" content="website">
+  
+  <!-- Stylings -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div id="app-container">
+    
+    <!-- Top Global Header Control Panel -->
+    <header class="nav-header">
+      <div id="btn-home-logo" class="logo-group">
+        <span class="logo-icon">🐘</span>
+        <h1 class="logo-text">WONDERS OF KALYAN</h1>
+      </div>
+      <div class="controls-group">
+        <button id="btn-toggle-speech-panel" class="icon-btn" title="Reading Voice Settings">🗣️</button>
+        <button id="btn-toggle-music" class="icon-btn" title="Toggle Ambient Music">🎵</button>
+        <button id="btn-toggle-sound" class="icon-btn" title="Mute/Unmute Sounds">🔊</button>
+        <button id="btn-open-glossary" class="icon-btn" title="View Kids' Glossary" onclick="toggleDrawer('drawer-glossary')">📖</button>
+        <button id="btn-open-guide" class="icon-btn" title="View Teacher/Parent Guide" onclick="toggleDrawer('drawer-guide')">🍎</button>
+      </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <main id="main-content-screens">
+      
+      <!-- SCREEN 1: COVER PAGE -->
+      <section id="screen-cover" class="screen active">
+        <div class="cover-card">
+          <div class="cover-image-container">
+            <img id="img-cover-illustration" src="images/cover.png" alt="Aarya, Veer, and Nisha standing together on a golden display stand">
+          </div>
+          <h2 class="cover-title">The Wonders of Kalyan</h2>
+          <p class="cover-subtitle">A Magical Chibi Journey Through History! Join Aarya, Veer, and Nisha as they discover shipbuilders, historic forts, steam trains, and the smart city of tomorrow!</p>
+          <button id="btn-start-reading" class="start-btn" onclick="startStorybook()">Start the Adventure! ➔</button>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: STORYBOOK READER -->
+      <section id="screen-reader" class="screen">
+        <div class="storybook-layout">
+          
+          <!-- Left side: Story book page -->
+          <div class="story-page">
+            
+            <!-- Page markers -->
+            <div class="story-header">
+              <span id="reader-page-number" class="page-marker">PAGE 1</span>
+              <span id="reader-level-badge" class="level-badge">LEVEL 1: SPICE ROUTE</span>
+            </div>
+
+            <!-- Narrated Story Area -->
+            <div id="reader-story-box" class="story-text">
+              <!-- Content gets injected dynamically with word spans for active reading highlights -->
+            </div>
+
+            <!-- Read Aloud Controller -->
+            <div class="narrate-btn-container">
+              <button id="btn-narrate-page" class="narrate-btn">
+                <span id="narrate-icon">🔊</span> <span id="narrate-text">Read Aloud</span>
+              </button>
+              <select id="select-speech-voice" class="narrate-btn" style="background: white; color: var(--wood-brown); border: 2px solid var(--bg-sepia-accent); display: none;">
+                <!-- Voices loaded dynamically -->
+              </select>
+            </div>
+
+            <!-- Did you know fact banner -->
+            <div id="reader-fact-banner" class="fact-box">
+              <h4 class="fact-title">💡 Did You Know?</h4>
+              <p id="reader-fact-content" class="fact-content">
+                In the 1st century, Kalyan was a famous global port called Calliena...
+              </p>
+            </div>
+
+            <!-- Interactive Activity Moment -->
+            <div id="reader-activity-card" class="activity-container">
+              <div class="activity-header">
+                🎮 <span id="activity-title-text">Sort the Cargo!</span>
+              </div>
+              
+              <!-- Dynamic Game Area (Games injected by app.js) -->
+              <div id="game-sandbox-pane" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                <!-- Mini-game items go here -->
+              </div>
+
+              <!-- Overlay celebrating game completion -->
+              <div id="game-success-overlay" class="game-success-overlay">
+                <span class="success-icon">🏆</span>
+                <h3>Wonderful Job!</h3>
+                <p>You solved the page puzzle!</p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Right side: 3D Chibi Toy Showcase -->
+          <div class="display-page">
+            <div id="toy-showcase-stand" class="wood-display-stand">
+              <div class="illustration-box">
+                <img id="reader-illustration" src="images/page1_port.png" alt="Chibi character illustration of current page">
+              </div>
+              <div id="reader-plaque" class="brass-plaque">
+                <span id="reader-plaque-text" class="brass-plaque-text">THE SPICE ROUTE OF ANCIENT CALLIENA</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Book Navigation Bar -->
+        <nav class="footer-nav">
+          <button id="btn-prev-page" class="nav-btn" onclick="prevPage()">
+            <span>◀</span> Back
+          </button>
+          
+          <div id="dots-navigator" class="level-dots-container">
+            <!-- 12 page dot indicators injected dynamically -->
+          </div>
+
+          <button id="btn-next-page" class="nav-btn" onclick="nextPage()">
+            Next <span>▶</span>
+          </button>
+        </nav>
+
+      </section>
+
+    </main>
+
+    <!-- SLIDE OUT DRAWER: Glossary -->
+    <div id="drawer-glossary" class="drawer-overlay">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <h3>📚 Kids' Glossary</h3>
+          <button class="icon-btn" onclick="toggleDrawer('drawer-glossary')">❌</button>
+        </div>
+        <div id="glossary-accordion-container" class="drawer-body">
+          <!-- Glossary terms injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE OUT DRAWER: Parent/Teacher Guide -->
+    <div id="drawer-guide" class="drawer-overlay">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <h3>🍎 Parent & Teacher Guide</h3>
+          <button class="icon-btn" onclick="toggleDrawer('drawer-guide')">❌</button>
+        </div>
+        <div class="drawer-body">
+          <ul id="parent-tips-list">
+            <li class="parent-bullet">
+              <strong>Active Storytelling:</strong> Ask children to spot the recurring 3D wooden display stand on every single page. This helps them understand the visual concept of a collectible toy cabinet!
+            </li>
+            <li class="parent-bullet">
+              <strong>Geography & Roots:</strong> Show your kids where Kalyan is on a map of Maharashtra. Point out how the rivers meet the creek, explaining why it was a perfect deep-water port 2,000 years ago.
+            </li>
+            <li class="parent-bullet">
+              <strong>Chivalry Discussions:</strong> Use Page 7 to talk about courage and respect. Discuss how Shivaji Maharaj showed deep respect to the governor's family and why that is a crucial sign of true bravery.
+            </li>
+            <li class="parent-bullet">
+              <strong>Designing Tomorrow:</strong> On Page 11 and 12, ask your child: "If you could invent a smart computer or helper robot for our town, what would it do?"
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
