@@ -321,8 +321,16 @@ function goToPage(index) {
   });
 
   // Setup navigation state buttons
-  document.getElementById("btn-prev-page").disabled = currentPageIndex === 0;
-  document.getElementById("btn-next-page").disabled = currentPageIndex === storybookPages.length - 1;
+  const isFirstPage = currentPageIndex === 0;
+  const isLastPage = currentPageIndex === storybookPages.length - 1;
+
+  document.getElementById("btn-prev-page").disabled = isFirstPage;
+  document.getElementById("btn-next-page").disabled = isLastPage;
+
+  const floatPrev = document.getElementById("btn-float-prev");
+  const floatNext = document.getElementById("btn-float-next");
+  if (floatPrev) floatPrev.disabled = isFirstPage;
+  if (floatNext) floatNext.disabled = isLastPage;
 
   // Update dots navigator
   document.querySelectorAll(".level-dot").forEach(dot => dot.classList.remove("active"));

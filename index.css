@@ -868,29 +868,125 @@ h1, h2, h3 {
 }
 
 /* ==========================================================================
+   FLOATING PAGE NAVIGATION BUTTONS (DESKTOP)
+   ========================================================================== */
+.float-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: white;
+  border: 3.5px solid var(--wood-brown);
+  color: var(--wood-brown);
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  box-shadow: var(--shadow-medium), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transition: var(--transition-smooth);
+}
+
+.float-nav-btn.prev {
+  left: max(20px, calc(50% - 560px - 34px)); /* Sits exactly 34px left of the 1120px book edge, floor of 20px */
+}
+
+.float-nav-btn.next {
+  right: max(20px, calc(50% - 560px - 34px)); /* Sits exactly 34px right of the 1120px book edge, floor of 20px */
+}
+
+.float-nav-btn:hover:not(:disabled) {
+  background: var(--color-saffron);
+  border-color: var(--color-saffron);
+  color: white;
+  box-shadow: 0 8px 24px var(--color-saffron-glow);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.float-nav-btn:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.float-nav-btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.8);
+}
+
+/* ==========================================================================
    RESPONSIVE DESIGN (Media Queries)
    ========================================================================== */
 @media (max-width: 900px) {
   body {
-    overflow: auto; /* Fallback scroll on very small mobile viewports */
+    overflow: hidden; /* Lock the viewport completely */
   }
   
   #app-container {
-    height: auto;
-    min-height: 100vh;
-    padding: 0.8rem;
-    overflow: auto;
+    height: 100dvh;
+    padding: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.3rem;
+  }
+  
+  .nav-header {
+    height: 48px;
+    padding: 0 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.2rem;
+    flex-shrink: 0;
+  }
+  
+  .logo-icon {
+    font-size: 1.4rem;
+  }
+  
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .controls-group {
+    gap: 5px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
   }
   
   #main-content-screens {
-    height: auto;
-    overflow: visible;
+    flex: 1;
+    height: calc(100% - 52px); /* Snug fit */
+    overflow: hidden;
   }
   
+  .screen {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .float-nav-btn {
+    display: none !important; /* Hide floating buttons on mobile */
+  }
+  
+  /* Stack the layout vertically in a snug 100% VH container */
   .storybook-layout {
-    grid-template-columns: 1fr;
-    border: 8px solid var(--wood-brown);
-    height: auto;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    border: 7px solid var(--wood-brown);
+    outline: 2.5px solid var(--color-saffron);
+    border-radius: 18px;
+    flex: 1;
+    height: 100%;
+    min-height: 0; /* CRITICAL: Allows flex child to shrink properly */
     max-height: none;
   }
   
@@ -898,43 +994,306 @@ h1, h2, h3 {
     display: none;
   }
 
+  /* Compact Diorama stand Header on Mobile */
   .display-page {
     border-right: none;
-    border-bottom: 2px dashed var(--bg-sepia-accent);
-    padding: 1rem;
-    height: auto;
+    border-bottom: 3px double var(--bg-sepia-accent);
+    padding: 0.4rem;
+    height: 155px; /* Compact height */
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-cream-dark);
   }
   
+  .wood-display-stand {
+    width: 140px;
+    height: 140px;
+    border-width: 4px;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .wood-display-stand::after {
+    height: 10px;
+    border-top: 1.5px solid var(--gold-flat);
+  }
+  
+  .illustration-box {
+    border-width: 2px;
+  }
+  
+  .brass-plaque {
+    height: 22px;
+    width: 90%;
+    border-radius: 2px;
+    margin-bottom: 0;
+  }
+  
+  .brass-plaque-text {
+    font-size: 0.62rem;
+    letter-spacing: 0.5px;
+    padding: 0 4px;
+  }
+  
+  /* Scrollable story page internally on mobile */
   .story-page {
-    padding: 1rem;
-    height: auto;
-    overflow-y: visible;
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    overflow-y: auto;
+    background: var(--bg-cream);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    -webkit-overflow-scrolling: touch;
   }
   
-  .footer-nav {
-    height: auto;
-    margin-top: 1rem;
-    flex-direction: column;
-    gap: 10px;
+  .story-header {
+    padding-bottom: 0.25rem;
+    border-bottom-width: 1px;
   }
-}
 
-@media (max-width: 600px) {
-  .logo-text {
-    font-size: 1.1rem;
+  .page-marker {
+    font-size: 0.85rem;
+  }
+
+  .level-badge {
+    font-size: 0.65rem;
+    padding: 1px 6px;
+  }
+
+  .story-text {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  
+  .narrate-btn-container {
+    gap: 6px;
+  }
+
+  .narrate-btn {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+  }
+
+  .fact-box {
+    padding: 0.4rem;
+  }
+
+  .fact-title {
+    font-size: 0.78rem;
+    margin-bottom: 1px;
+  }
+
+  .fact-content {
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  .activity-container {
+    padding: 6px;
+    min-height: 110px;
+  }
+
+  .activity-header {
+    font-size: 0.78rem;
+    margin-bottom: 4px;
+  }
+
+  .cargo-game-container {
+    gap: 6px;
+  }
+
+  .cargo-item {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .cargo-ship {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .bamboo-grid {
+    gap: 6px;
+  }
+
+  .bamboo-stalk {
+    height: 38px;
+  }
+
+  /* Compact bottom navigation bar */
+  .footer-nav {
+    height: 48px;
+    margin-top: 0.2rem;
+    padding: 0 0.5rem;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row !important; /* Lock to horizontal row */
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+  }
+  
+  .nav-btn {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 18px;
+    font-size: 0.85rem;
+    border-width: 1.5px;
+  }
+  
+  .level-dots-container {
+    gap: 6px;
+  }
+  
+  .level-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Cover card adjustments */
+  .cover-card {
+    padding: 1.2rem;
+    gap: 0.8rem;
+    max-height: 98%;
+    border-width: 4px;
+    border-radius: 18px;
+  }
+  
+  .cover-image-container {
+    width: 240px;
+    height: 180px;
+    border-width: 3px;
   }
   
   .cover-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+  
+  .cover-subtitle {
+    font-size: 0.9rem;
+    max-width: 360px;
   }
   
   .start-btn {
     padding: 0.6rem 2rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .cover-card {
+    width: 100%;
+    padding: 1rem 0.8rem;
+    gap: 0.6rem;
+  }
+
+  .cover-image-container {
+    width: 190px;
+    height: 140px;
+  }
+
+  .cover-title {
+    font-size: 1.35rem;
+  }
+
+  .cover-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .start-btn {
+    padding: 0.5rem 1.6rem;
+    font-size: 0.9rem;
   }
   
-  .cover-image-container {
-    width: 280px;
-    height: 210px;
+  .logo-text {
+    font-size: 0.95rem;
+  }
+  
+  .logo-icon {
+    font-size: 1.2rem;
+  }
+
+  .icon-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .display-page {
+    height: 145px;
+  }
+
+  .wood-display-stand {
+    width: 130px;
+    height: 130px;
+    padding: 4px;
+  }
+
+  .wood-display-stand::after {
+    height: 8px;
+  }
+
+  .brass-plaque {
+    height: 20px;
+  }
+
+  .brass-plaque-text {
+    font-size: 0.58rem;
+  }
+
+  .story-page {
+    padding: 0.7rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .story-text {
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  .fact-box {
+    padding: 0.3rem 0.4rem;
+  }
+
+  .fact-title {
+    font-size: 0.75rem;
+  }
+
+  .fact-content {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .activity-container {
+    min-height: 100px;
+    padding: 4px;
+  }
+
+  .activity-header {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+  }
+
+  .footer-nav {
+    height: 44px;
+  }
+
+  .nav-btn {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 0.78rem;
+  }
+
+  .level-dots-container {
+    gap: 4px;
+  }
+
+  .level-dot {
+    width: 6px;
+    height: 6px;
   }
 }

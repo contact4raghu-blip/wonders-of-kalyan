@@ -49,7 +49,11 @@
       </section>
 
       <!-- SCREEN 2: STORYBOOK READER -->
-      <section id="screen-reader" class="screen">
+      <section id="screen-reader" class="screen" style="position: relative;">
+        <!-- Large Floating Navigation Arrows (Desktop centered) -->
+        <button id="btn-float-prev" class="float-nav-btn prev" onclick="prevPage()" title="Previous Page">◀</button>
+        <button id="btn-float-next" class="float-nav-btn next" onclick="nextPage()" title="Next Page">▶</button>
+
         <div class="storybook-layout">
           
           <!-- Left side: Story book page -->
