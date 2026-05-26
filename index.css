@@ -212,24 +212,24 @@ h1, h2, h3 {
    ========================================================================== */
 .cover-card {
   width: 100%;
-  max-width: 780px;
+  max-width: 660px; /* Snug, centered layout */
   background: var(--bg-cream);
   border-radius: 24px;
-  padding: 2rem;
+  padding: 1.25rem 1.75rem; /* Snug padding saves vertical space */
   border: 6px double var(--bg-sepia-accent);
   box-shadow: var(--shadow-heavy);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
-  overflow-y: auto;
-  max-height: 95%;
+  gap: 0.8rem; /* Snug gaps to keep elements together */
+  overflow: hidden; /* Prevent ugly scrollbars */
+  max-height: 98%;
 }
 
 .cover-image-container {
-  width: 400px;
-  height: 300px;
+  width: 320px; /* Scaled down slightly to save 60px height */
+  height: 240px; /* Perfectly fits 4:3 aspect ratio */
   border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-medium);
@@ -246,27 +246,28 @@ h1, h2, h3 {
 }
 
 .cover-title {
-  font-size: 2.2rem;
+  font-size: 1.8rem; /* Reduced from 2.2rem to fit snuggly */
   color: var(--color-crimson);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .cover-subtitle {
   font-family: var(--font-kids);
-  font-size: 1.05rem;
+  font-size: 0.95rem; /* Reduced from 1.05rem */
   color: var(--color-green-dark);
   font-weight: 700;
-  max-width: 550px;
+  max-width: 500px;
+  line-height: 1.35;
 }
 
 .start-btn {
   font-family: var(--font-serif);
-  font-size: 1.2rem;
+  font-size: 1.1rem; /* Compact font size */
   font-weight: 900;
   background: linear-gradient(135deg, var(--color-saffron), var(--color-crimson));
   color: white;
   border: none;
-  padding: 0.8rem 2.5rem;
+  padding: 0.7rem 2.2rem; /* Compact padding */
   border-radius: 40px;
   cursor: pointer;
   box-shadow: 0 6px 20px var(--color-crimson-glow);
@@ -274,8 +275,8 @@ h1, h2, h3 {
 }
 
 .start-btn:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 24px var(--color-saffron-glow);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 20px var(--color-saffron-glow);
 }
 
 /* ==========================================================================
