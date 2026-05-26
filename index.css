@@ -115,6 +115,25 @@ h1, h2, h3 {
 .logo-icon {
   font-size: 1.6rem;
   animation: float 3s ease-in-out infinite;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon.medallion {
+  width: 32px;
+  height: 32px;
+  background: var(--gold-trim);
+  border: 1.5px solid var(--wood-brown);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15), inset 1px 1px 2px rgba(255,255,255,0.7);
+  font-size: 1.05rem;
+  transition: var(--transition-smooth);
+}
+
+.logo-group:hover .logo-icon.medallion {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 4px 10px var(--color-saffron-glow);
 }
 
 .logo-text {
@@ -221,7 +240,8 @@ h1, h2, h3 {
 .cover-image-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Prevents cut-offs by showing the full illustration! */
+  background: white; /* Blends seamlessly with the white framed border */
   transition: transform 6s ease;
 }
 
@@ -965,6 +985,13 @@ h1, h2, h3 {
   .logo-icon {
     font-size: 1.4rem;
   }
+
+  .logo-icon.medallion {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+    border-width: 1px;
+  }
   
   .logo-text {
     font-size: 1.1rem;
@@ -1258,6 +1285,12 @@ h1, h2, h3 {
   
   .logo-icon {
     font-size: 1.2rem;
+  }
+
+  .logo-icon.medallion {
+    width: 22px;
+    height: 22px;
+    font-size: 0.72rem;
   }
 
   .icon-btn {
