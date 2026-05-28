@@ -578,8 +578,70 @@ function startNarration() {
   // Detect mobile device to bypass Web Speech API queue restrictions
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 0);
   
+  // Dynamic inline voice resolver if voices were not loaded on initial page load (common on iOS Safari / Chrome Mobile)
+  if (!voiceFemale || !voiceMale) {
+    try {
+      const voices = speechSynth.getVoices();
+      if (voices && voices.length > 0) {
+        let bestFemaleScore = -1;
+        let bestMaleScore = -1;
+        
+        voices.forEach(voice => {
+          if (voice && voice.lang) {
+            const langLower = voice.lang.toLowerCase();
+            const nameLower = voice.name.toLowerCase();
+            if (langLower.includes("en-in") || langLower.includes("en_in") || nameLower.includes("india")) {
+              const isMaleName = nameLower.includes("prabhat") || nameLower.includes("ravi") || nameLower.includes("male");
+              
+              let score = 0;
+              if (nameLower.includes("neerja")) score += 100;
+              if (nameLower.includes("prabhat")) score += 100;
+              if (nameLower.includes("online")) score += 80;
+              if (nameLower.includes("natural")) score += 70;
+              if (nameLower.includes("google")) score += 50;
+              if (nameLower.includes("ravi")) score += 40;
+              if (nameLower.includes("heera")) score += 40;
+
+              if (isMaleName) {
+                if (score > bestMaleScore) {
+                  bestMaleScore = score;
+                  voiceMale = voice;
+                }
+              } else {
+                if (score > bestFemaleScore) {
+                  bestFemaleScore = score;
+                  voiceFemale = voice;
+                }
+              }
+            }
+          }
+        });
+        
+        if (!voiceFemale && voiceMale) voiceFemale = voiceMale;
+        if (!voiceMale && voiceFemale) voiceMale = voiceFemale;
+        
+        if (!voiceFemale || !voiceMale) {
+          voices.forEach(voice => {
+            if (voice && voice.lang && voice.lang.toLowerCase().includes("en")) {
+              const nameLower = voice.name.toLowerCase();
+              const isMaleName = nameLower.includes("david") || nameLower.includes("james") || nameLower.includes("male") || nameLower.includes("mark");
+              if (isMaleName && !voiceMale) voiceMale = voice;
+              if (!isMaleName && !voiceFemale) voiceFemale = voice;
+            }
+          });
+        }
+        
+        if (!voiceFemale) voiceFemale = voices[0] || null;
+        if (!voiceMale) voiceMale = voiceFemale;
+      }
+    } catch (e) {
+      console.warn("Inline voice resolution failed:", e);
+    }
+  }
+
   const voiceSelect = document.getElementById("select-speech-voice");
-  const userSelectedVoiceName = voiceSelect ? voiceSelect.value : "conversational_duo";
+  let userSelectedVoiceName = voiceSelect ? voiceSelect.value : "conversational_duo";
+  if (!userSelectedVoiceName) userSelectedVoiceName = "conversational_duo";
 
   // Force single voice fallback on mobile devices to prevent iOS Safari/Android WebView queue blocks!
   if (isMobile && userSelectedVoiceName === "conversational_duo") {
