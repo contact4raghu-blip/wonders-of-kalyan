@@ -327,8 +327,8 @@ h1, h2, h3 {
 }
 
 .wood-display-stand {
-  width: 270px; /* Scaled down stand */
-  height: 270px; /* Scaled down stand */
+  width: 330px; /* Scaled up stand for maximum chibi detail visibility */
+  height: 330px; /* Scaled up stand for maximum chibi detail visibility */
   background: linear-gradient(var(--bg-cream), var(--bg-cream-dark));
   border: 7px solid var(--wood-brown);
   border-radius: 12px;
@@ -1213,7 +1213,7 @@ h1, h2, h3 {
     border-right: none;
     border-bottom: 3px double var(--bg-sepia-accent);
     padding: 0.4rem;
-    height: 155px; /* Compact height */
+    height: 220px; /* Scaled up from 155px for larger chibi detail visibility */
     flex-shrink: 0;
     display: flex;
     justify-content: center;
@@ -1222,8 +1222,8 @@ h1, h2, h3 {
   }
   
   .wood-display-stand {
-    width: 140px;
-    height: 140px;
+    width: 200px; /* Scaled up from 140px */
+    height: 200px; /* Scaled up from 140px */
     border-width: 4px;
     border-radius: 8px;
     padding: 5px;
@@ -1476,12 +1476,12 @@ h1, h2, h3 {
   }
 
   .display-page {
-    height: 145px;
+    height: 190px; /* Scaled up from 145px */
   }
 
   .wood-display-stand {
-    width: 130px;
-    height: 130px;
+    width: 175px; /* Scaled up from 130px */
+    height: 175px; /* Scaled up from 130px */
     padding: 4px;
   }
 
@@ -1593,14 +1593,14 @@ h1, h2, h3 {
   }
   
   .storybook-layout {
-    max-height: 330px !important; /* Scale down the main book display */
+    max-height: 350px !important; /* Scale down the main book display but keep it spacious */
     border-width: 8px !important;
     outline-width: 2.5px !important;
   }
   
   .wood-display-stand {
-    width: 210px !important; /* Scale down wooden stand showcase */
-    height: 210px !important;
+    width: 250px !important; /* Scaled up from 210px for high visibility */
+    height: 250px !important;
     border-width: 5px !important;
     padding: 6px !important;
   }
