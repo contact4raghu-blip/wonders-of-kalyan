@@ -243,18 +243,36 @@ function setupGlobalEvents() {
     btnNarrate.addEventListener("click", toggleNarration);
   }
 
-  // Scroll Indicator button click scrolls down to the mini-game
+  // Scroll Indicator button click/touch scrolls down to the mini-game
   const scrollIndicator = document.getElementById("scroll-indicator");
   if (scrollIndicator) {
-    scrollIndicator.addEventListener("click", () => {
+    let scrollTriggered = false;
+    const triggerScroll = (e) => {
+      // Prevent browser default behavior and double-firing from click emulation
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+
+      if (scrollTriggered) return;
+      scrollTriggered = true;
+      setTimeout(() => { scrollTriggered = false; }, 1000); // 1s cooldown
+
       const storyPage = document.querySelector(".story-page");
       if (storyPage) {
-        storyPage.scrollTo({
-          top: storyPage.scrollHeight,
-          behavior: "smooth"
-        });
+        // Try smooth scrolling, fallback to instant scroll if smooth is unsupported/buggy on mobile WebView
+        try {
+          storyPage.scrollTo({
+            top: storyPage.scrollHeight,
+            behavior: "smooth"
+          });
+        } catch (err) {
+          storyPage.scrollTop = storyPage.scrollHeight;
+        }
       }
-    });
+    };
+
+    // Listen to touchstart for instant response on mobile, fallback to click for desktop
+    scrollIndicator.addEventListener("touchstart", triggerScroll, { passive: false });
+    scrollIndicator.addEventListener("click", triggerScroll);
   }
 
   // Keyboard navigation
