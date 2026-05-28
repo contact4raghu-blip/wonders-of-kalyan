@@ -1,5 +1,5 @@
 /* index.css - Viewport Height Locked Design System */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Outfit:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Outfit:wght@400;500;600;700&family=Quicksand:wght@500;600;700&family=Sacramento&display=swap');
 
 :root {
   /* HSL Color System */
@@ -908,6 +908,50 @@ h1, h2, h3 {
 }
 
 /* ==========================================================================
+   ARTISTIC CREATOR SIGNATURE
+   ========================================================================== */
+.artistic-signature {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: hsla(24, 25%, 35%, 0.65);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  user-select: none;
+  animation: fadeIn 1s ease-out;
+}
+
+.signature-cursive {
+  font-family: 'Sacramento', 'Brush Script MT', cursive;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--color-crimson);
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+  transform: rotate(-3deg);
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+/* Placed on Cover Page */
+.cover-sig {
+  margin-top: auto;
+  align-self: flex-end;
+  padding-top: 5px;
+}
+
+/* Placed on Story Pages (Page 12 only) */
+.reader-sig {
+  margin-top: auto;
+  align-self: flex-end;
+  padding-top: 10px;
+  border-top: 1px dashed var(--bg-sepia-accent);
+  width: 100%;
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
    FLOATING PAGE NAVIGATION BUTTONS (DESKTOP)
    ========================================================================== */
 .float-nav-btn {
@@ -1253,6 +1297,14 @@ h1, h2, h3 {
     padding: 0.6rem 2rem;
     font-size: 1rem;
   }
+
+  .artistic-signature {
+    font-size: 0.72rem;
+  }
+
+  .signature-cursive {
+    font-size: 1.35rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1375,5 +1427,13 @@ h1, h2, h3 {
   .level-dot {
     width: 6px;
     height: 6px;
+  }
+
+  .artistic-signature {
+    font-size: 0.68rem;
+  }
+
+  .signature-cursive {
+    font-size: 1.2rem;
   }
 }

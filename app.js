@@ -341,6 +341,13 @@ function goToPage(index) {
   // Load interactive game frame
   loadMiniGame(page.gameType);
 
+  // Show signature only on the last page (Page 12, index 11)
+  const readerSig = document.getElementById("reader-signature");
+  if (readerSig) {
+    const isLastPage = currentPageIndex === storybookPages.length - 1;
+    readerSig.style.display = isLastPage ? "flex" : "none";
+  }
+
   // Play normal paging page sound
   if (isSoundOn) window.storyAudio.playPageFlip();
 }
