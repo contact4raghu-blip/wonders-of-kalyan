@@ -178,6 +178,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupGlobalEvents() {
+  // Start the Adventure button click transition
+  const btnStart = document.getElementById("btn-start-reading");
+  if (btnStart) {
+    btnStart.addEventListener("click", startStorybook);
+  }
+
   // Navigation Logo click returns to cover
   document.getElementById("btn-home-logo").addEventListener("click", () => {
     stopNarration();
