@@ -417,9 +417,8 @@ function goToPage(index) {
   }
 
   // Remove next button pulsing from previous pages
-  const btnNext = document.getElementById("btn-next-page");
-  const floatNext = document.getElementById("btn-float-next");
   if (btnNext) btnNext.classList.remove("pulse-attention");
+  const floatNext = document.getElementById("btn-float-next");
   if (floatNext) floatNext.classList.remove("pulse-attention");
 
   // Play normal paging page sound
