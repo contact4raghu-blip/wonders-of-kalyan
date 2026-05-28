@@ -547,8 +547,8 @@ function startNarration() {
   }
 
   // Adjust child-friendly voice rate and pitch
-  currentUtterance.rate = 0.85; // Slow and friendly
-  currentUtterance.pitch = 1.1; // Sightly higher kid-friendly pitch
+  currentUtterance.rate = 0.9; // Natural, clear, and slightly slower speed
+  currentUtterance.pitch = 1.0; // Perfect natural pitch (default) to completely prevent shaky/robotic resampling distortions
 
   // Speech listeners
   currentUtterance.onstart = () => {
