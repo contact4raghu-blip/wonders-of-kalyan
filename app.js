@@ -348,6 +348,42 @@ function goToPage(index) {
     readerSig.style.display = isLastPage ? "flex" : "none";
   }
 
+  // Reset scroll of story card to top on page flip & setup dynamic scroll helper
+  const storyPage = document.querySelector(".story-page");
+  if (storyPage) {
+    storyPage.scrollTop = 0;
+    
+    const scrollIndicator = document.getElementById("scroll-indicator");
+    if (scrollIndicator) {
+      scrollIndicator.style.opacity = "1";
+      setTimeout(() => {
+        const isScrollable = storyPage.scrollHeight > storyPage.clientHeight + 10;
+        scrollIndicator.style.display = isScrollable ? "flex" : "none";
+      }, 100);
+
+      storyPage.onscroll = () => {
+        if (storyPage.scrollTop > 30) {
+          scrollIndicator.style.opacity = "0";
+          setTimeout(() => {
+            if (storyPage.scrollTop > 30) scrollIndicator.style.display = "none";
+          }, 300);
+        } else {
+          const isScrollable = storyPage.scrollHeight > storyPage.clientHeight + 10;
+          if (isScrollable) {
+            scrollIndicator.style.display = "flex";
+            scrollIndicator.style.opacity = "1";
+          }
+        }
+      };
+    }
+  }
+
+  // Remove next button pulsing from previous pages
+  const btnNext = document.getElementById("btn-next-page");
+  const floatNext = document.getElementById("btn-float-next");
+  if (btnNext) btnNext.classList.remove("pulse-attention");
+  if (floatNext) floatNext.classList.remove("pulse-attention");
+
   // Play normal paging page sound
   if (isSoundOn) window.storyAudio.playPageFlip();
 }
@@ -464,6 +500,12 @@ function celebrateGameSuccess() {
   if (isSoundOn) window.storyAudio.playFanfare();
   const overlay = document.getElementById("game-success-overlay");
   overlay.style.display = "flex";
+  
+  // Conspicuously pulse the Next buttons to draw attention to progress!
+  const btnNext = document.getElementById("btn-next-page");
+  const floatNext = document.getElementById("btn-float-next");
+  if (btnNext) btnNext.classList.add("pulse-attention");
+  if (floatNext) floatNext.classList.add("pulse-attention");
   
   // Confetti micro-trigger could go here, or just basic celebration
   setTimeout(() => {
