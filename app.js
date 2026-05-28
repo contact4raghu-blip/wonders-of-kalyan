@@ -161,7 +161,9 @@ let isSpeaking = false;
 let voiceSettingsOpen = false;
 
 let speechSynth = window.speechSynthesis;
-let currentUtterance = null;
+let currentUtterances = []; // Queue list for multi-voice conversation sentences
+let voiceFemale = null; // Sophisticated female Indian storyteller (Aarya / Nisha)
+let voiceMale = null; // Sophisticated male Indian storyteller (Veer / Narrator)
 let currentWordIndex = 0;
 let storyWords = [];
 
@@ -478,9 +480,9 @@ function loadSpeechVoices() {
       if (!voices || voices.length === 0) return;
       select.innerHTML = "";
       
-      // 1. Identify the most sophisticated Indian English voice to serve as Sadaltager
-      let bestIndianVoice = null;
-      let bestScore = -1;
+      // 1. Identify the most sophisticated Indian English female & male voices
+      let bestFemaleScore = -1;
+      let bestMaleScore = -1;
       
       voices.forEach(voice => {
         if (voice && voice.lang) {
@@ -488,44 +490,68 @@ function loadSpeechVoices() {
           const nameLower = voice.name.toLowerCase();
           
           if (langLower.includes("en-in") || langLower.includes("en_in") || nameLower.includes("india")) {
+            // Identify gender based on typical system voice naming conventions
+            const isMaleName = nameLower.includes("prabhat") || nameLower.includes("ravi") || nameLower.includes("male");
+            
             let score = 0;
-            // Online natural neural voices are top tier (extremely sophisticated & natural)
             if (nameLower.includes("neerja")) score += 100;
-            if (nameLower.includes("prabhat")) score += 90;
+            if (nameLower.includes("prabhat")) score += 100;
             if (nameLower.includes("online")) score += 80;
             if (nameLower.includes("natural")) score += 70;
             if (nameLower.includes("google")) score += 50;
-            if (nameLower.includes("ravi")) score += 30;
-            if (nameLower.includes("heera")) score += 20;
-            
-            if (score > bestScore) {
-              bestScore = score;
-              bestIndianVoice = voice;
+            if (nameLower.includes("ravi")) score += 40;
+            if (nameLower.includes("heera")) score += 40;
+
+            if (isMaleName) {
+              if (score > bestMaleScore) {
+                bestMaleScore = score;
+                voiceMale = voice;
+              }
+            } else {
+              if (score > bestFemaleScore) {
+                bestFemaleScore = score;
+                voiceFemale = voice;
+              }
             }
           }
         }
       });
       
-      // 2. Populate voice options, branding the Indian voice as Sadaltager
+      // Fallback cross-assignments if one gender is missing in local Indian voices
+      if (!voiceFemale && voiceMale) voiceFemale = voiceMale;
+      if (!voiceMale && voiceFemale) voiceMale = voiceFemale;
+      
+      // Fallback to standard non-IN voices of opposite genders if still missing
+      if (!voiceFemale || !voiceMale) {
+        voices.forEach(voice => {
+          if (voice && voice.lang && voice.lang.toLowerCase().includes("en")) {
+            const nameLower = voice.name.toLowerCase();
+            const isMaleName = nameLower.includes("david") || nameLower.includes("james") || nameLower.includes("male") || nameLower.includes("mark");
+            if (isMaleName && !voiceMale) voiceMale = voice;
+            if (!isMaleName && !voiceFemale) voiceFemale = voice;
+          }
+        });
+      }
+      
+      // Final hardware fallbacks
+      if (!voiceFemale) voiceFemale = voices[0] || null;
+      if (!voiceMale) voiceMale = voiceFemale;
+
+      // 2. Populate voice options, starting with our premium Conversational Duo as the pre-selected default!
+      const duoOpt = document.createElement("option");
+      duoOpt.value = "conversational_duo";
+      duoOpt.innerText = "Sadaltager (Natural Indian Accent Duo 👫)";
+      duoOpt.selected = true;
+      select.appendChild(duoOpt);
+      
       voices.forEach(voice => {
         if (voice && voice.lang && (voice.lang.includes("en") || voice.lang.includes("IN") || voice.lang.includes("in"))) {
           const opt = document.createElement("option");
           opt.value = voice.name;
-          
-          if (bestIndianVoice && voice.name === bestIndianVoice.name) {
-            opt.innerText = `Sadaltager (Natural Indian Accent - ${voice.name})`;
-            opt.selected = true; // Pre-select Sadaltager!
-          } else {
-            opt.innerText = `${voice.name} (${voice.lang})`;
-          }
+          opt.innerText = `${voice.name} (${voice.lang})`;
           select.appendChild(opt);
         }
       });
-
-      // 3. Fallback selection to the Indian voice if not auto-selected
-      if (bestIndianVoice && select.value !== bestIndianVoice.name) {
-        select.value = bestIndianVoice.name;
-      }
     } catch (e) {
       console.warn("Voices retrieval error:", e);
     }
@@ -548,59 +574,107 @@ function startNarration() {
   stopNarration();
 
   const page = storybookPages[currentPageIndex];
-  currentUtterance = new SpeechSynthesisUtterance(page.story);
   
-  // Set user selected voice if any
-  const voiceSelect = document.getElementById("select-speech-voice");
-  if (voiceSelect && voiceSelect.value) {
-    const voices = speechSynth.getVoices();
-    const voice = voices.find(v => v.name === voiceSelect.value);
-    if (voice) currentUtterance.voice = voice;
-  }
+  // 1. Convert story words array to individual sentences to ensure 100% exact index mapping
+  const fullStoryWords = page.story.split(" ");
+  const sentences = [];
+  let currentSentenceWords = [];
+  let currentStartIdx = 0;
 
-  // Adjust child-friendly voice rate and pitch
-  currentUtterance.rate = 0.92; // Highly articulate, sophisticated storytelling speed
-  currentUtterance.pitch = 1.0; // Perfect natural pitch (default) to completely prevent shaky/robotic resampling distortions
-
-  // Speech listeners
-  currentUtterance.onstart = () => {
-    isSpeaking = true;
-    document.getElementById("narrate-icon").innerText = "⏹️";
-    document.getElementById("narrate-text").innerText = "Stop Reading";
-  };
-
-  currentUtterance.onend = () => {
-    stopNarration();
-  };
-
-  // Word boundary tracking for highlighting!
-  currentUtterance.onboundary = (event) => {
-    if (event.name === 'word') {
-      const charIndex = event.charIndex;
-      // Map charIndex to word index
-      const cumulativeText = page.story.substring(0, charIndex);
-      const spokenWordCount = (cumulativeText.match(/\S+/g) || []).length;
-      
-      // Remove highlighting from previous words
-      document.querySelectorAll(".word-span").forEach(span => span.classList.remove("speaking"));
-      
-      // Highlight current word
-      const currentWordSpan = document.getElementById(`word-${spokenWordCount}`);
-      if (currentWordSpan) {
-        currentWordSpan.classList.add("speaking");
-        // Scroll slightly into view if needed
-        currentWordSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
+  fullStoryWords.forEach((word, idx) => {
+    currentSentenceWords.push(word);
+    const cleanWord = word.trim();
+    const isEnding = cleanWord.endsWith(".") || cleanWord.endsWith("!") || cleanWord.endsWith("?") || cleanWord.endsWith('."') || cleanWord.endsWith('!"') || cleanWord.endsWith('?"');
+    
+    if (isEnding || idx === fullStoryWords.length - 1) {
+      sentences.push({
+        text: currentSentenceWords.join(" "),
+        startIdx: currentStartIdx,
+        wordCount: currentSentenceWords.length
+      });
+      currentSentenceWords = [];
+      currentStartIdx = idx + 1;
     }
-  };
+  });
 
-  speechSynth.speak(currentUtterance);
+  currentUtterances = [];
+  isSpeaking = true;
+  document.getElementById("narrate-icon").innerText = "⏹️";
+  document.getElementById("narrate-text").innerText = "Stop Reading";
+
+  const voiceSelect = document.getElementById("select-speech-voice");
+  const userSelectedVoiceName = voiceSelect ? voiceSelect.value : "conversational_duo";
+
+  sentences.forEach((sentence, sIdx) => {
+    const utterance = new SpeechSynthesisUtterance(sentence.text);
+    
+    // 2. Select voice based on user preference or dynamic conversational-duo rules
+    if (userSelectedVoiceName && userSelectedVoiceName !== "conversational_duo") {
+      const voices = speechSynth.getVoices();
+      const voice = voices.find(v => v.name === userSelectedVoiceName);
+      if (voice) utterance.voice = voice;
+    } else {
+      // Dynamic conversational alternate rules
+      const textLower = sentence.text.toLowerCase();
+      let chosenVoice = null;
+      
+      // Look for male/female character keywords
+      if (textLower.includes("veer") || textLower.includes("merchant") || textLower.includes("shivaji") || textLower.includes("tilak") || textLower.includes("bhangare") || textLower.includes("commander") || textLower.includes("khan") || textLower.includes("king")) {
+        chosenVoice = voiceMale || voiceFemale;
+      } else if (textLower.includes("aarya") || textLower.includes("nisha") || textLower.includes("anandibai") || textLower.includes("female") || textLower.includes("devi")) {
+        chosenVoice = voiceFemale || voiceMale;
+      } else {
+        // Natural alternate conversation
+        chosenVoice = (sIdx % 2 === 0) ? (voiceFemale || voiceMale) : (voiceMale || voiceFemale);
+      }
+      
+      if (chosenVoice) utterance.voice = chosenVoice;
+    }
+
+    // 3. Set sophisticated storytelling parameters
+    utterance.rate = 0.92; // Elegant, measured speed
+    utterance.pitch = 1.0; // Crystal clear pitch
+
+    // 4. Exact word highlighting boundaries
+    utterance.onboundary = (event) => {
+      if (event.name === 'word') {
+        const charIndex = event.charIndex;
+        const textBeforeChar = sentence.text.substring(0, charIndex);
+        const spokenWordCount = textBeforeChar.split(" ").filter(w => w.length > 0).length;
+        const globalWordIndex = sentence.startIdx + spokenWordCount;
+
+        document.querySelectorAll(".word-span").forEach(span => span.classList.remove("speaking"));
+        
+        const currentWordSpan = document.getElementById(`word-${globalWordIndex}`);
+        if (currentWordSpan) {
+          currentWordSpan.classList.add("speaking");
+          currentWordSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    };
+
+    utterance.onend = () => {
+      if (sIdx === sentences.length - 1) {
+        stopNarration();
+      }
+    };
+
+    utterance.onerror = () => {
+      if (sIdx === sentences.length - 1) {
+        stopNarration();
+      }
+    };
+
+    currentUtterances.push(utterance);
+    speechSynth.speak(utterance);
+  });
 }
 
 function stopNarration() {
   if (speechSynth) {
     speechSynth.cancel();
   }
+  currentUtterances = [];
   isSpeaking = false;
   document.getElementById("narrate-icon").innerText = "🔊";
   document.getElementById("narrate-text").innerText = "Read Aloud";
