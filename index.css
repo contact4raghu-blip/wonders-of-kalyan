@@ -372,7 +372,7 @@ h1, h2, h3 {
 }
 
 .brass-plaque {
-  width: 90%;
+  width: 95%; /* Expanded from 90% for more horizontal text space */
   min-height: 38px;
   height: auto;
   padding: 4px 8px;
@@ -403,19 +403,16 @@ h1, h2, h3 {
 
 .brass-plaque-text {
   font-family: var(--font-serif);
-  font-size: 0.78rem;
+  font-size: 0.82rem; /* Slightly scaled up for legibility */
   font-weight: 900;
   color: hsl(24, 40%, 10%);
-  text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
   letter-spacing: 0.5px;
   text-align: center;
   white-space: normal;
-  line-height: 1.2;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  line-height: 1.25;
   padding: 2px 4px;
+  display: block; /* Enables natural text wrapping without truncation */
 }
 
 /* RIGHT PAGE: Auto-scroll content card */
@@ -1242,22 +1239,20 @@ h1, h2, h3 {
   .brass-plaque {
     height: auto;
     min-height: 26px;
-    width: 90%;
+    width: 95%; /* Expanded from 90% */
     border-radius: 2px;
     margin-bottom: 0;
     padding: 2px 4px;
   }
   
   .brass-plaque-text {
-    font-size: 0.56rem;
+    font-size: 10px; /* Highly legible and respects browser minimum limits */
+    font-weight: 900;
     letter-spacing: 0.3px;
     padding: 1px 2px;
-    line-height: 1.15;
+    line-height: 1.2;
     white-space: normal;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: block; /* Enables clean wrapping on mobile */
   }
   
   /* Scrollable story page internally on mobile */
@@ -1492,12 +1487,15 @@ h1, h2, h3 {
   .brass-plaque {
     height: auto;
     min-height: 24px;
+    width: 95%; /* Wider plaque on small phones */
     padding: 1px 3px;
   }
 
   .brass-plaque-text {
-    font-size: 0.52rem;
-    line-height: 1.1;
+    font-size: 9.5px; /* Perfect, legible label size */
+    font-weight: 900;
+    line-height: 1.15;
+    display: block;
   }
 
   .story-page {
