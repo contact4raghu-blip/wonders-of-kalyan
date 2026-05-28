@@ -437,20 +437,26 @@ function nextPage() {
 
 // Speech TTS engine with dynamic boundary listener
 function loadSpeechVoices() {
-  if (!speechSynth) return;
+  if (!speechSynth || typeof speechSynth.getVoices !== "function") return;
   const select = document.getElementById("select-speech-voice");
+  if (!select) return;
   
   const voicesChanged = () => {
-    const voices = speechSynth.getVoices();
-    select.innerHTML = "";
-    voices.forEach(voice => {
-      if (voice.lang.includes("en") || voice.lang.includes("IN")) {
-        const opt = document.createElement("option");
-        opt.value = voice.name;
-        opt.innerText = `${voice.name} (${voice.lang})`;
-        select.appendChild(opt);
-      }
-    });
+    try {
+      const voices = speechSynth.getVoices();
+      if (!voices) return;
+      select.innerHTML = "";
+      voices.forEach(voice => {
+        if (voice && voice.lang && (voice.lang.includes("en") || voice.lang.includes("IN"))) {
+          const opt = document.createElement("option");
+          opt.value = voice.name;
+          opt.innerText = `${voice.name} (${voice.lang})`;
+          select.appendChild(opt);
+        }
+      });
+    } catch (e) {
+      console.warn("Voices retrieval error:", e);
+    }
   };
 
   speechSynth.onvoiceschanged = voicesChanged;
