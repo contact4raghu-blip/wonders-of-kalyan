@@ -169,13 +169,19 @@ let storyWords = [];
 // 3. UI INITIALIZER
 // ==========================================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
+
+function initApp() {
   setupGlobalEvents();
   renderGlossary();
   setupLevelDots();
   loadSpeechVoices();
   setupSwipeGestures();
-});
+}
 
 function setupGlobalEvents() {
   // Start the Adventure button click transition
