@@ -243,6 +243,20 @@ function setupGlobalEvents() {
     btnNarrate.addEventListener("click", toggleNarration);
   }
 
+  // Scroll Indicator button click scrolls down to the mini-game
+  const scrollIndicator = document.getElementById("scroll-indicator");
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener("click", () => {
+      const storyPage = document.querySelector(".story-page");
+      if (storyPage) {
+        storyPage.scrollTo({
+          top: storyPage.scrollHeight,
+          behavior: "smooth"
+        });
+      }
+    });
+  }
+
   // Keyboard navigation
   document.addEventListener("keydown", (e) => {
     const screenReader = document.getElementById("screen-reader");

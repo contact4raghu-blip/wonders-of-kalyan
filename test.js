@@ -77,6 +77,28 @@
       }
       log("Transitioned to Storybook Reader screen successfully.");
 
+      // 2b. Test Scroll Indicator Click
+      log("Testing Scroll Down to Play button...");
+      const storyPage = document.querySelector(".story-page");
+      const scrollBtn = document.getElementById("scroll-indicator");
+      if (storyPage && scrollBtn) {
+        await sleep(200); // Allow browser rendering / scroll indicator setup
+        const isScrollable = storyPage.scrollHeight > storyPage.clientHeight + 10;
+        if (isScrollable) {
+          log("Page is scrollable. Simulating click on scroll helper...");
+          const originalScrollTop = storyPage.scrollTop;
+          scrollBtn.click();
+          await sleep(600); // Wait for smooth scroll animation
+          if (storyPage.scrollTop > originalScrollTop) {
+            log("Story page scrolled down successfully via button click!");
+          } else {
+            throw new Error("Story page scroll position did not increase after clicking scroll helper!");
+          }
+        } else {
+          log("Page is not scrollable, skipping active scroll-down click test.");
+        }
+      }
+
       // 3. Loop through all 12 pages
       const totalPages = 12;
       for (let i = 0; i < totalPages; i++) {
