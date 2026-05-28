@@ -478,17 +478,29 @@ function loadSpeechVoices() {
       if (!voices || voices.length === 0) return;
       select.innerHTML = "";
       
-      // 1. Identify the best Indian English voice to serve as Sadaltager
+      // 1. Identify the most sophisticated Indian English voice to serve as Sadaltager
       let bestIndianVoice = null;
+      let bestScore = -1;
+      
       voices.forEach(voice => {
         if (voice && voice.lang) {
           const langLower = voice.lang.toLowerCase();
           const nameLower = voice.name.toLowerCase();
+          
           if (langLower.includes("en-in") || langLower.includes("en_in") || nameLower.includes("india")) {
-            if (!bestIndianVoice) {
+            let score = 0;
+            // Online natural neural voices are top tier (extremely sophisticated & natural)
+            if (nameLower.includes("neerja")) score += 100;
+            if (nameLower.includes("prabhat")) score += 90;
+            if (nameLower.includes("online")) score += 80;
+            if (nameLower.includes("natural")) score += 70;
+            if (nameLower.includes("google")) score += 50;
+            if (nameLower.includes("ravi")) score += 30;
+            if (nameLower.includes("heera")) score += 20;
+            
+            if (score > bestScore) {
+              bestScore = score;
               bestIndianVoice = voice;
-            } else if (nameLower.includes("google") || nameLower.includes("natural") || nameLower.includes("heera")) {
-              bestIndianVoice = voice; // Prefer premium/natural/Heera online voices
             }
           }
         }
@@ -547,7 +559,7 @@ function startNarration() {
   }
 
   // Adjust child-friendly voice rate and pitch
-  currentUtterance.rate = 0.9; // Natural, clear, and slightly slower speed
+  currentUtterance.rate = 0.92; // Highly articulate, sophisticated storytelling speed
   currentUtterance.pitch = 1.0; // Perfect natural pitch (default) to completely prevent shaky/robotic resampling distortions
 
   // Speech listeners
