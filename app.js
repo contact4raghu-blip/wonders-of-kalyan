@@ -475,16 +475,45 @@ function loadSpeechVoices() {
   const voicesChanged = () => {
     try {
       const voices = speechSynth.getVoices();
-      if (!voices) return;
+      if (!voices || voices.length === 0) return;
       select.innerHTML = "";
+      
+      // 1. Identify the best Indian English voice to serve as Sadaltager
+      let bestIndianVoice = null;
       voices.forEach(voice => {
-        if (voice && voice.lang && (voice.lang.includes("en") || voice.lang.includes("IN"))) {
+        if (voice && voice.lang) {
+          const langLower = voice.lang.toLowerCase();
+          const nameLower = voice.name.toLowerCase();
+          if (langLower.includes("en-in") || langLower.includes("en_in") || nameLower.includes("india")) {
+            if (!bestIndianVoice) {
+              bestIndianVoice = voice;
+            } else if (nameLower.includes("google") || nameLower.includes("natural") || nameLower.includes("heera")) {
+              bestIndianVoice = voice; // Prefer premium/natural/Heera online voices
+            }
+          }
+        }
+      });
+      
+      // 2. Populate voice options, branding the Indian voice as Sadaltager
+      voices.forEach(voice => {
+        if (voice && voice.lang && (voice.lang.includes("en") || voice.lang.includes("IN") || voice.lang.includes("in"))) {
           const opt = document.createElement("option");
           opt.value = voice.name;
-          opt.innerText = `${voice.name} (${voice.lang})`;
+          
+          if (bestIndianVoice && voice.name === bestIndianVoice.name) {
+            opt.innerText = `Sadaltager (Natural Indian Accent - ${voice.name})`;
+            opt.selected = true; // Pre-select Sadaltager!
+          } else {
+            opt.innerText = `${voice.name} (${voice.lang})`;
+          }
           select.appendChild(opt);
         }
       });
+
+      // 3. Fallback selection to the Indian voice if not auto-selected
+      if (bestIndianVoice && select.value !== bestIndianVoice.name) {
+        select.value = bestIndianVoice.name;
+      }
     } catch (e) {
       console.warn("Voices retrieval error:", e);
     }
