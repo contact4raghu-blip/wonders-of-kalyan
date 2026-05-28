@@ -233,5 +233,14 @@
   <!-- Scripts -->
   <script src="audio.js?v=3"></script>
   <script src="app.js?v=3"></script>
+
+  <!-- Testing Engine Loader -->
+  <script>
+    if (window.location.search.includes("test=true")) {
+      const script = document.createElement("script");
+      script.src = "test.js?v=3";
+      document.body.appendChild(script);
+    }
+  </script>
 </body>
 </html>
