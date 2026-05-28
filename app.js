@@ -575,6 +575,55 @@ function startNarration() {
 
   const page = storybookPages[currentPageIndex];
   
+  // Detect mobile device to bypass Web Speech API queue restrictions
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 0);
+  
+  const voiceSelect = document.getElementById("select-speech-voice");
+  const userSelectedVoiceName = voiceSelect ? voiceSelect.value : "conversational_duo";
+
+  // Force single voice fallback on mobile devices to prevent iOS Safari/Android WebView queue blocks!
+  if (isMobile && userSelectedVoiceName === "conversational_duo") {
+    console.log("Mobile device detected. Falling back to single high-fidelity voice to prevent SpeechSynthesis queue blocking.");
+    const chosenVoice = voiceFemale || voiceMale;
+    
+    const utterance = new SpeechSynthesisUtterance(page.story);
+    if (chosenVoice) utterance.voice = chosenVoice;
+    
+    utterance.rate = 0.92;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = () => {
+      isSpeaking = true;
+      document.getElementById("narrate-icon").innerText = "⏹️";
+      document.getElementById("narrate-text").innerText = "Stop Reading";
+    };
+
+    utterance.onend = () => {
+      stopNarration();
+    };
+
+    utterance.onboundary = (event) => {
+      if (event.name === 'word') {
+        const charIndex = event.charIndex;
+        const cumulativeText = page.story.substring(0, charIndex);
+        const spokenWordCount = (cumulativeText.match(/\S+/g) || []).length;
+        
+        document.querySelectorAll(".word-span").forEach(span => span.classList.remove("speaking"));
+        
+        const currentWordSpan = document.getElementById(`word-${spokenWordCount}`);
+        if (currentWordSpan) {
+          currentWordSpan.classList.add("speaking");
+          currentWordSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    };
+
+    // Store in our array so stopNarration can clean it up
+    currentUtterances = [utterance];
+    speechSynth.speak(utterance);
+    return;
+  }
+
   // 1. Convert story words array to individual sentences to ensure 100% exact index mapping
   const fullStoryWords = page.story.split(" ");
   const sentences = [];
