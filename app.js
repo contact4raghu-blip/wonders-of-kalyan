@@ -191,50 +191,62 @@ function setupGlobalEvents() {
   }
 
   // Navigation Logo click returns to cover
-  document.getElementById("btn-home-logo").addEventListener("click", () => {
-    stopNarration();
-    showScreen("screen-cover");
-  });
+  const btnLogo = document.getElementById("btn-home-logo");
+  if (btnLogo) {
+    btnLogo.addEventListener("click", () => {
+      stopNarration();
+      showScreen("screen-cover");
+    });
+  }
 
   // Sound toggles
   const btnMusic = document.getElementById("btn-toggle-music");
+  if (btnMusic) {
+    btnMusic.addEventListener("click", () => {
+      isMusicOn = !isMusicOn;
+      btnMusic.classList.toggle("active", isMusicOn);
+      if (isMusicOn) {
+        if (window.storyAudio) window.storyAudio.startBackgroundMusic();
+        btnMusic.innerText = "🎶";
+      } else {
+        if (window.storyAudio) window.storyAudio.stopBackgroundMusic();
+        btnMusic.innerText = "🎵";
+      }
+    });
+  }
+
   const btnSound = document.getElementById("btn-toggle-sound");
+  if (btnSound) {
+    btnSound.addEventListener("click", () => {
+      isSoundOn = !isSoundOn;
+      btnSound.classList.toggle("active", !isSoundOn);
+      if (window.storyAudio) window.storyAudio.muted = !isSoundOn;
+      btnSound.innerText = isSoundOn ? "🔊" : "🔇";
+    });
+  }
+
   const btnSpeech = document.getElementById("btn-toggle-speech-panel");
-
-  btnMusic.addEventListener("click", () => {
-    isMusicOn = !isMusicOn;
-    btnMusic.classList.toggle("active", isMusicOn);
-    if (isMusicOn) {
-      window.storyAudio.startBackgroundMusic();
-      btnMusic.innerText = "🎶";
-    } else {
-      window.storyAudio.stopBackgroundMusic();
-      btnMusic.innerText = "🎵";
-    }
-  });
-
-  btnSound.addEventListener("click", () => {
-    isSoundOn = !isSoundOn;
-    btnSound.classList.toggle("active", !isSoundOn);
-    window.storyAudio.muted = !isSoundOn;
-    btnSound.innerText = isSoundOn ? "🔊" : "🔇";
-  });
-
-  btnSpeech.addEventListener("click", () => {
-    const select = document.getElementById("select-speech-voice");
-    voiceSettingsOpen = !voiceSettingsOpen;
-    select.style.display = voiceSettingsOpen ? "inline-block" : "none";
-    btnSpeech.classList.toggle("active", voiceSettingsOpen);
-  });
+  if (btnSpeech) {
+    btnSpeech.addEventListener("click", () => {
+      const select = document.getElementById("select-speech-voice");
+      if (select) {
+        voiceSettingsOpen = !voiceSettingsOpen;
+        select.style.display = voiceSettingsOpen ? "inline-block" : "none";
+      }
+      btnSpeech.classList.toggle("active", voiceSettingsOpen);
+    });
+  }
 
   // Narration button on right page
   const btnNarrate = document.getElementById("btn-narrate-page");
-  btnNarrate.addEventListener("click", toggleNarration);
+  if (btnNarrate) {
+    btnNarrate.addEventListener("click", toggleNarration);
+  }
 
   // Keyboard navigation
   document.addEventListener("keydown", (e) => {
-    const readerActive = document.getElementById("screen-reader").classList.contains("active");
-    if (readerActive) {
+    const screenReader = document.getElementById("screen-reader");
+    if (screenReader && screenReader.classList.contains("active")) {
       if (e.key === "ArrowLeft") prevPage();
       if (e.key === "ArrowRight") nextPage();
     }
@@ -315,30 +327,44 @@ function goToPage(index) {
   const page = storybookPages[currentPageIndex];
 
   // Update text blocks
-  document.getElementById("reader-page-number").innerText = `PAGE ${page.pageNumber}`;
-  document.getElementById("reader-level-badge").innerText = page.levelTitle;
-  document.getElementById("reader-plaque-text").innerText = page.title;
-  document.getElementById("reader-fact-content").innerText = page.didYouKnow;
-  document.getElementById("reader-illustration").src = page.imagePath;
+  const elPageNum = document.getElementById("reader-page-number");
+  if (elPageNum) elPageNum.innerText = `PAGE ${page.pageNumber}`;
+  
+  const elLevelBadge = document.getElementById("reader-level-badge");
+  if (elLevelBadge) elLevelBadge.innerText = page.levelTitle;
+  
+  const elPlaqueText = document.getElementById("reader-plaque-text");
+  if (elPlaqueText) elPlaqueText.innerText = page.title;
+  
+  const elFactContent = document.getElementById("reader-fact-content");
+  if (elFactContent) elFactContent.innerText = page.didYouKnow;
+  
+  const elIllustration = document.getElementById("reader-illustration");
+  if (elIllustration) elIllustration.src = page.imagePath;
 
   // Split story into spans for read-aloud word highlighting
   const storyBox = document.getElementById("reader-story-box");
-  storyBox.innerHTML = "";
-  storyWords = page.story.split(" ");
-  storyWords.forEach((word, idx) => {
-    const span = document.createElement("span");
-    span.className = "word-span";
-    span.id = `word-${idx}`;
-    span.innerText = word;
-    storyBox.appendChild(span);
-  });
+  if (storyBox) {
+    storyBox.innerHTML = "";
+    storyWords = page.story.split(" ");
+    storyWords.forEach((word, idx) => {
+      const span = document.createElement("span");
+      span.className = "word-span";
+      span.id = `word-${idx}`;
+      span.innerText = word;
+      storyBox.appendChild(span);
+    });
+  }
 
   // Setup navigation state buttons
   const isFirstPage = currentPageIndex === 0;
   const isLastPage = currentPageIndex === storybookPages.length - 1;
 
-  document.getElementById("btn-prev-page").disabled = isFirstPage;
-  document.getElementById("btn-next-page").disabled = isLastPage;
+  const btnPrev = document.getElementById("btn-prev-page");
+  if (btnPrev) btnPrev.disabled = isFirstPage;
+  
+  const btnNext = document.getElementById("btn-next-page");
+  if (btnNext) btnNext.disabled = isLastPage;
 
   const floatPrev = document.getElementById("btn-float-prev");
   const floatNext = document.getElementById("btn-float-next");
