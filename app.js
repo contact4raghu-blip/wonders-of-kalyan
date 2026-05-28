@@ -650,10 +650,6 @@ function startNarration() {
   isSpeaking = true;
   document.getElementById("narrate-icon").innerText = "⏹️";
   document.getElementById("narrate-text").innerText = "Stop Reading";
-
-  const voiceSelect = document.getElementById("select-speech-voice");
-  const userSelectedVoiceName = voiceSelect ? voiceSelect.value : "conversational_duo";
-
   sentences.forEach((sentence, sIdx) => {
     const utterance = new SpeechSynthesisUtterance(sentence.text);
     
