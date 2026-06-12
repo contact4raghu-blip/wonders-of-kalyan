@@ -96,7 +96,18 @@ const storybookPages = [
   {
     pageNumber: 9,
     level: 5,
-    levelTitle: "LEVEL 5: THE IRON HORSE",
+    levelTitle: "LEVEL 5: PESHWAS' ALLIANCE",
+    title: "THE LEGEND OF KASHIBAI'S WEDDING WADA",
+    story: "Ring the wedding bells! In 1720, the brave Peshwa Bajirao I married his first wife, Kashibai. Her father, Mahadji Krishna Joshi, was a wealthy banker and the Subedar of Kalyan. Aarya, Veer, and Nisha visit the majestic ruins of Kashibai's ancestral wada in Kalyan, decorated with yellow marigold garlands and warm clay oil lamps. \"This is where the grand alliance began!\" whispers Aarya, wearing a colorful headpiece. While some records say the wedding was in Saswad, local legends in Kalyan celebrate the wedding in her family home here. Let's help decorate the wada! Drag or click the floral torans and glowing brass lamps to their correct positions on the wooden archway to celebrate the Peshwin's grand homecoming!",
+    didYouKnow: "Kashibai’s father, Mahadji Krishna Joshi, was the Subedar of Kalyan and a wealthy banker who funded the Maratha Empire. A famous local legend in Kalyan claims Kashibai married Peshwa Bajirao I at her family's Kalyan wada.",
+    imagePath: "images/page13_wedding.png",
+    gameTitle: "Decorate the Wada!",
+    gameType: "wada_decorate"
+  },
+  {
+    pageNumber: 10,
+    level: 6,
+    levelTitle: "LEVEL 6: THE IRON HORSE",
     title: "THE FIRST TRAIN AND THE TAX REBELLION",
     story: "Chugga-chugga, choo-choo! In 1853, history was made as India’s first train puffed from Bori Bunder to Thane, soon extending directly to Kalyan Junction! The British took down the stone walls of Durgadi Fort to build strong piers for the iron tracks. \"The train is so loud and fast!\" laughs Nisha, chugging along the path. But when the British introduced unfair taxes, the brave citizens of Kalyan rebelled, publicly discarding the tax forms in protest! Ramji Bhangare led the Koli and Bhil communities to stand up for their rights. Help lay the tracks! Solve the maze game to connect Kalyan Junction to the main railway line!",
     didYouKnow: "In 1853, India's first passenger train line reached Kalyan, using stones from dismantled forts to build the railway piers. In the 1860s, local residents bravely protested British rule by publicly throwing away newly introduced income tax forms.",
@@ -105,9 +116,9 @@ const storybookPages = [
     gameType: "train_maze"
   },
   {
-    pageNumber: 10,
-    level: 5,
-    levelTitle: "LEVEL 5: THE IRON HORSE",
+    pageNumber: 11,
+    level: 6,
+    levelTitle: "LEVEL 6: THE IRON HORSE",
     title: "DOCTORS, LEADERS, AND WINDOW TREATS",
     story: "Kalyan is home to incredible heroes! Here, young Anandibai Joshi grew up to become India’s very first female doctor. Later, Lokmanya Tilak organized the first public Ganesh festival in Kalyan to bring people together in unity. \"I want to help people too!\" says Nisha, looking at Dr. Anandibai's medical book. And after a long day of learning, it is time for a snack! The Vaze family is opening a small wooden window to serve the very first Khidki Vada Pav to rushing commuters. Help serve the treats! Match the hot, spicy potato sliders to the hungry train travelers before the whistle blows. Yum!",
     didYouKnow: "Kalyan is the birthplace of Dr. Anandibai Joshi, who became India’s first female Western doctor in 1886. Years later, in 1968, the famous \"Khidki Vada Pav\" was founded in Kalyan, selling delicious snacks through a window to busy commuters.",
@@ -116,9 +127,9 @@ const storybookPages = [
     gameType: "vada_pav_serve"
   },
   {
-    pageNumber: 11,
-    level: 6,
-    levelTitle: "LEVEL 6: SMART CITY",
+    pageNumber: 12,
+    level: 7,
+    levelTitle: "LEVEL 7: SMART CITY",
     title: "CLEANING UP ADHARWADI WITH AI",
     story: "Welcome to the super-smart Kalyan of today! The city now uses high-tech magic, like an AI-driven command center with smart traffic lights and cameras to keep everyone safe. \"Look at the giant mechanical digger!\" shouts Veer, pointing at a clean, green park. For many years, the old Adharwadi dumping ground was filled with towers of trash. Today, smart biomining machines are turning that old waste into useful fuel to power homes! Let's help clean up the environment! Play the sorting game: drag the plastic bottles and paper boxes into the smart recycling bins to help Aarya and Veer clean up the park.",
     didYouKnow: "Kalyan has permanently closed the polluted Adharwadi dumping ground. A massive biomining project is currently converting 9 lakh metric tonnes of old waste into clean, Refuse-Derived Fuel to help protect the environment.",
@@ -127,9 +138,9 @@ const storybookPages = [
     gameType: "smart_sorting"
   },
   {
-    pageNumber: 12,
-    level: 6,
-    levelTitle: "LEVEL 6: SMART CITY",
+    pageNumber: 13,
+    level: 7,
+    levelTitle: "LEVEL 7: SMART CITY",
     title: "THE METRO EXPRESS TO THE FUTURE",
     story: "Whoosh! The orange Metro Line 5 train zooms past on high, elevated tracks! Modern Kalyan is building massive roads, freeways through Parsik Hill, and the giant Kalyan Growth Centre to create thousands of fun new jobs. \"We are flying above the traffic!\" cheers Nisha, looking out the window of the sleek, orange train. Let's drive the future express! Guide the orange metro train through the special underground heritage tunnel in Bhiwandi, taking care not to disturb the ancient monuments above. Cross the new Mankoli-Motagaon Bridge in record time and park at the smart terminal. The future of Kalyan is bright, and you are the driver!",
     didYouKnow: "Kalyan is building a massive modern transit web, including the 33.30-kilometer Kalyan Ring Road and Metro Line 5, which features a specialized 5-kilometer underground tunnel to protect Bhiwandi's heritage structures.",
@@ -328,7 +339,7 @@ function toggleAccordion(id) {
   if (isSoundOn) window.storyAudio.playCorrect();
 }
 
-// Setup navigation dots for 12 pages
+// Setup navigation dots for 13 pages
 function setupLevelDots() {
   const container = document.getElementById("dots-navigator");
   container.innerHTML = "";
@@ -413,7 +424,7 @@ function goToPage(index) {
   // Load interactive game frame
   loadMiniGame(page.gameType);
 
-  // Show signature only on the last page (Page 12, index 11)
+  // Show signature only on the last page (Page 13, index 12)
   const readerSig = document.getElementById("reader-signature");
   if (readerSig) {
     const isLastPage = currentPageIndex === storybookPages.length - 1;
@@ -789,7 +800,7 @@ function stopNarration() {
 }
 
 // ==========================================================================
-// 5. 12 DYNAMIC MINI-GAME PLAYLOADS
+// 5. 13 DYNAMIC MINI-GAME PLAYLOADS
 // ==========================================================================
 
 function celebrateGameSuccess() {
@@ -843,6 +854,9 @@ function loadMiniGame(type) {
       break;
     case "train_maze":
       initTrainMazeGame(container);
+      break;
+    case "wada_decorate":
+      initWadaDecorateGame(container);
       break;
     case "vada_pav_serve":
       initVadaPavGame(container);
@@ -1187,6 +1201,50 @@ function initTrainMazeGame(container) {
 
     if (pos >= 69) {
       celebrateGameSuccess();
+    }
+  };
+}
+
+// GAME 9.5: Wada Decorate
+function initWadaDecorateGame(container) {
+  document.getElementById("activity-title-text").innerText = "Decorate the Wada!";
+  container.innerHTML = `
+    <p style="font-size:0.85rem; margin-bottom:8px; text-align:center;">Match the decorations to the right spots on the Wada!</p>
+    <div style="display:flex; justify-content:center; gap:12px; width:100%; margin-bottom:10px;">
+      <div id="deco-garland" class="cargo-item" onclick="selectDecoration('garland')">🌸 Flower Garland</div>
+      <div id="deco-lamp" class="cargo-item" onclick="selectDecoration('lamp')">🪔 Brass Diya</div>
+    </div>
+    <div style="display:flex; justify-content:center; gap:20px; width:100%;">
+      <div id="target-pillars" class="cargo-ship" onclick="dropDecoration('pillars')">🏛️ Archway Pillars</div>
+      <div id="target-entrance" class="cargo-ship" onclick="dropDecoration('entrance')">🚪 Wada Entrance</div>
+    </div>
+  `;
+
+  let selectedDecoration = null;
+  let matches = 0;
+
+  window.selectDecoration = (item) => {
+    selectedDecoration = item;
+    document.querySelectorAll("#deco-garland, #deco-lamp").forEach(el => el.style.borderColor = "var(--color-saffron)");
+    document.getElementById(`deco-${item}`).style.borderColor = "var(--color-crimson)";
+    if (isSoundOn) window.storyAudio.playCorrect();
+  };
+
+  window.dropDecoration = (target) => {
+    if (!selectedDecoration) return;
+    
+    // garland -> pillars, lamp -> entrance
+    if ((selectedDecoration === 'garland' && target === 'pillars') || (selectedDecoration === 'lamp' && target === 'entrance')) {
+      document.getElementById(`deco-${selectedDecoration}`).style.display = "none";
+      document.getElementById(`target-${target}`).style.backgroundColor = "var(--color-saffron-light)";
+      if (isSoundOn) window.storyAudio.playCorrect();
+      matches++;
+      selectedDecoration = null;
+      if (matches === 2) {
+        setTimeout(celebrateGameSuccess, 400);
+      }
+    } else {
+      if (isSoundOn) window.storyAudio.playIncorrect();
     }
   };
 }

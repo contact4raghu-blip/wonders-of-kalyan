@@ -106,8 +106,8 @@
         }
       }
 
-      // 3. Loop through all 12 pages
-      const totalPages = 12;
+      // 3. Loop through all 13 pages
+      const totalPages = 13;
       for (let i = 0; i < totalPages; i++) {
         log(`Validating Page ${i + 1}...`);
         
